@@ -2,7 +2,7 @@
 MySQL服务器执行SQL记录实时监控（WEB版本）
 
 **使用方法：**
-上传mysql_monitor_server.php,mysql_monitor_cls.php,mysql_monitor_client.html,last_count.dat以及assets文件夹到服务器上，然后访问mysql_monitor_client.html之后，输入正确的数据库连接参数，点击Connect按钮即可开始监控目标服务器所执行过的SQL语句。
+上传mysql_monitor_server.php,mysql_monitor_cls.php,mysql_monitor_client.html,last_count.dat以及assets文件夹到服务器上，然后访问mysql_monitor_client.html之后，输入正确的数据库连接参数（必须要用root用户连接），点击Connect按钮即可开始监控目标服务器所执行过的SQL语句。
 
 **注意事项：**
 
