@@ -1,0 +1,217 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <!-- author:昌维[867597730@qq.com] MySQL Monitor Client 客户端 -->
+  <!-- since:2016-10-25 00:24:32 website:www.changwei.me -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>MySQL Monitor</title>
+
+  <base target="_blank" />
+
+  <!-- Set render engine for 360 browser -->
+  <meta name="renderer" content="webkit">
+
+  <!-- No Baidu Siteapp-->
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+  <link rel="icon" type="image/png" href="assets/i/favicon.png">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+  <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+
+  <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileImage" content="assets/i/app-icon72x72@2x.png">
+  <meta name="msapplication-TileColor" content="#0e90d2">
+
+  <link rel="stylesheet" href="assets/css/amazeui.min.css">
+  <link rel="stylesheet" href="assets/css/app.css">
+
+  <script src="assets/js/jquery.min.js"></script>
+</head>
+<body>
+  <header class="am-topbar am-topbar-inverse am-topbar-fixed-top">
+    <h1 class="am-topbar-brand">
+      <a href="#">MySQL Monitor Client</a>
+    </h1>
+
+    <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#doc-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+
+    <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
+      <ul class="am-nav am-nav-pills am-topbar-nav">
+        <li class="am-active"><a href="#">首页</a></li>
+        <li><a href="https://github.com/cw1997/MySQL-Monitor/blob/master/README.md">使用方法</a></li>
+        <li><a href="https://github.com/cw1997/MySQL-Monitor">github仓库</a></li>
+        <li><a href="http://www.changwei.me">博客</a></li>
+      </ul>
+    </div>
+  </header>
+  <div class="">
+    <div class="am-panel am-panel-secondary">
+      <div class="am-panel-hd">MySQL数据库连接参数</div>
+      <div class="am-panel-bd am-g">
+        <div class="am-input-group am-u-lg-2">
+          <span class="am-input-group-label"><i class="am-icon-database am-icon-fw"></i></span>
+          <input type="text" class="am-form-field" placeholder="MySQL Host" id="hostname" name="hostname" value="127.0.0.1">
+        </div>
+        <div class="am-input-group am-u-lg-2">
+          <span class="am-input-group-label"><i class="am-icon-chain am-icon-fw"></i></span>
+          <input type="text" class="am-form-field" placeholder="MySQL Port" id="port" name="port" value="3306">
+        </div>
+        <div class="am-input-group am-u-lg-3">
+          <span class="am-input-group-label"><i class="am-icon-user am-icon-fw"></i></span>
+          <input type="text" class="am-form-field" placeholder="MySQL User" id="username" name="username" value="root">
+        </div>
+        <div class="am-input-group am-u-lg-3">
+          <span class="am-input-group-label"><i class="am-icon-lock am-icon-fw"></i></span>
+          <input type="password" class="am-form-field" placeholder="MySQL Pass" id="password" name="password" value="root">
+        </div>
+        <div class="am-input-group am-u-lg-2">
+          <button type="button" class="am-btn am-btn-primary am-btn-block" id="connect">Connect</button>
+          <button type="button" class="am-btn am-btn-danger am-btn-block" id="disconnect" style="display: none;">Disonnect</button>
+        </div>
+      </div>
+    </div>
+    <div class="am-panel am-panel-primary">
+      <div class="am-panel-hd">SQL执行记录监控</div>
+      <div class="am-scrollable-horizontal">
+        <table class="am-table am-table-bordered am-table-hover am-table-striped am-text-nowrap">
+          <tr>
+            <th>event_time</th>
+            <th>user_host</th>
+            <th>thread_id</th>
+            <th>server_id</th>
+            <th>command_type</th>
+            <th>argument</th>
+          </tr>
+          <!-- <tr class="am-animation-slide-fade">
+            <td>event_time</td>
+            <td>user_host</td>
+            <td>thread_id</td>
+            <td>server_id</td>
+            <td>command_type</td>
+            <td>argument</td>
+          </tr> -->
+        </table>
+      </div>
+      <div class="am-panel-footer">共 <strong><span id="count">0</span></strong> 条记录</div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+  /**
+   {
+       "1": {
+           "event_time": "2016-10-24 11:37:42",
+           "user_host": "[root] @ localhost [127.0.0.1]",
+           "thread_id": "2",
+           "server_id": "0",
+           "command_type": "Connect",
+           "argument": "root@localhost on "
+       },
+       "2": {
+           "event_time": "2016-10-24 11:37:42",
+           "user_host": "root[root] @ localhost [127.0.0.1]",
+           "thread_id": "2",
+           "server_id": "0",
+           "command_type": "Query",
+           "argument": "select @@version_comment limit 1"
+       }
+   }
+   */
+  var interval_id;
+  $(function() {
+    $("#connect").click(function() {
+      start();
+      $(this).fadeOut('slow',function() {$("#disconnect").fadeIn('slow')});
+      $('#hostname').attr('readonly','true');
+      $('#username').attr('readonly','true');
+      $('#password').attr('readonly','true');
+      $('#port').attr('readonly','true');
+    })
+    $("#disconnect").click(function() {
+      clearInterval(interval_id);
+      $.get("mysql_monitor_cls.php?hostname=" + $('#hostname').val() + "&username=" + $('#username').val() + "&password=" + $('#password').val() + "&port=" + $('#port').val());
+      $(this).fadeOut('slow',function() {$("#connect").fadeIn('slow')});
+      $('#hostname').removeAttr('readonly');
+      $('#username').removeAttr('readonly');
+      $('#password').removeAttr('readonly');
+      $('#port').removeAttr('readonly');
+    })
+  })
+  function start() {
+    interval_id = setInterval(function() {
+      $.get("mysql_monitor_server.php?hostname=" + $('#hostname').val() + "&username=" + $('#username').val() + "&password=" + $('#password').val() + "&port=" + $('#port').val(),function(result){
+        // console.log(result);
+        if (result.indexOf('<br />')===0) {
+          $('#disconnect').trigger("click");
+          $('body').prepend('<div class="am-alert am-alert-warning am-animation-delay-6 am-animation-slide-right am-animation-reverse" data-am-alert><button type="button" class="am-close">&times;</button><p>' + result + '</p></div>');
+          setTimeout(function() {
+            $(".am-animation-delay-6").fadeOut('slow');
+          }, 6000);
+          return;
+        }
+        result = $.parseJSON(result);
+        $.each(result, function(i, field){
+          // console.log($("tr").length);
+          switch(field.command_type){
+            case 'Connect':
+              tr_color = 'am-success';
+              $('body').prepend('<div class="am-alert am-alert-success am-animation-delay-6 am-animation-slide-right am-animation-reverse" data-am-alert><button type="button" class="am-close">&times;</button><p>' + field.event_time + ' user_host:' + field.user_host + ' command_type:' + field.command_type + ' argument:' + field.argument + '</p></div>');
+              setTimeout(function() {
+                $(".am-animation-delay-6").fadeOut('slow');
+              }, 6000);
+              break;
+            case 'Quit':
+              tr_color = 'am-danger';
+              $('body').prepend('<div class="am-alert am-alert-danger am-animation-delay-6 am-animation-slide-right am-animation-reverse" data-am-alert><button type="button" class="am-close">&times;</button><p>' + field.event_time + ' ' + field.user_host + ' ' + field.command_type + ' ' + field.argument + '</p></div>');
+              setTimeout(function() {
+                $(".am-animation-delay-6").fadeOut('slow');
+              }, 6000);
+              break;
+            case 'Init DB':
+              tr_color = 'am-active';
+              $('body').prepend('<div class="am-alert am-alert-active am-animation-delay-6 am-animation-slide-right am-animation-reverse" data-am-alert><button type="button" class="am-close">&times;</button><p>' + field.event_time + ' ' + field.user_host + ' ' + field.command_type + ' ' + field.argument + '</p></div>');
+              setTimeout(function() {
+                $(".am-animation-delay-6").fadeOut('slow');
+              }, 6000);
+              break;
+            default:
+              tr_color = ''
+          }
+          $("table").append("<tr class='" + tr_color + "'><td>" + field.event_time + "</td><td>" + field.user_host + "</td><td>" + field.thread_id + "</td><td>" + field.server_id + "</td><td>" + field.command_type + "</td><td>" + field.argument + "</td></tr>");
+          document.body.scrollTop = document.body.scrollHeight;
+        });
+        $("#count").html($("tr").length - 1);
+      });
+    }, 2000);
+  }
+</script>
+<!--在这里编写你的代码-->
+<footer>
+  <p align="center">MySQL Monitor Client Github:<a href="https://github.com/cw1997/MySQL-Monitor">https://github.com/cw1997/MySQL-Monitor</a></p>
+  <p align="center">Copyright © 2016 昌维[867597730@qq.com] <a href="http://www.changwei.me">www.changwei.me</a> All rights reserved.</p>
+  <p></p>
+</footer>
+<!--[if (gte IE 9)|!(IE)]><!-->
+<!-- <script src="assets/js/jquery.min.js"></script> -->
+<!--<![endif]-->
+<!--[if lte IE 8 ]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+<script src="assets/js/amazeui.min.js"></script>
+</body>
+</html>
